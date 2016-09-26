@@ -1,0 +1,17 @@
+angular.module('cod')
+      .directive("materialSelect",function(){
+         return{
+           restrict:"EA",
+           link:function(scope,elem,attr){
+                elem.material_select();
+           }
+         };
+      })
+      .directive("materialButtonMenuCollapse",function(){
+         return{
+           restrict:"EA",
+           link:function(scope,elem,attr){
+                elem.sideNav();
+           }
+         };
+      });

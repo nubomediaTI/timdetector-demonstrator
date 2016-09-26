@@ -1,0 +1,37 @@
+<!-- Video container-->
+<div class = "mediaContainer">
+  <div class="codVideo" ng-class="{'shrink':callStarted}">
+    <video class="responsive-video" id="cameraVideo" autoplay poster="images/webrtc.png"></video>
+  </div>
+  <!-- received audio media element -->
+  <div class="codVideo" ng-show="callStarted">
+    <video id="sipAudio" autoplay class="responsive-video" poster="images/webrtc.png"></video>
+  </div>
+  <img src="images/trafficlight.png" class="trafficlight trafficlight-green"
+   ng-class="{'trafficlight-red':globalState == 'error','trafficlight-yellow':globalState == 'loading',
+              'trafficlight-green':globalState == 'working','trafficlight-off':globalState == 'notStarted'}">
+  <div class="waitTimer" ng-show="waitSecs>0">
+    <div class="waitText ng-cloak">{{waitSecs}}</div>
+    <round-progress class="roundTimer" max="60" current="waitSecs" color="#45ccce" bgcolor="#eaeaea" radius="200" stroke="15"
+                    clockwise="false" responsive="false" duration="800"
+                    animation="easeInOutQuart" animation-delay="0">
+    </round-progress>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col l3 m3 s4 offset-s2 offset-m4 offset-l4">
+    <button id="start" href class="btn btn-large waves-effect indigo"
+            ng-click="start()"
+            ng-disabled="isDisabled('start')">
+              <span class="glyphicon glyphicon-play"></span> Start
+    </button>
+  </div>
+  <div class="col l3 m3 s4">
+    <button id="stop" class="btn btn-large waves-effect materialize-red"
+      ng-click="stop()"
+      ng-disabled="isDisabled('stop')">
+        <span class="glyphicon glyphicon-stop"></span> Stop
+    </button>
+  </div>
+</div>

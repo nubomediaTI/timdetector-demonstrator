@@ -1,0 +1,39 @@
+{
+  "name": "callondetect",
+  "version": "6.4.1",
+  "description": "issue a sip call on face detection",
+  "authors": [
+    "NUBOMEDIA <nubomediaproject@gmail.com>"
+  ],
+  "main": "index.html",
+  "moduleType": [
+    "globals"
+  ],
+  "license": "LGPL",
+  "homepage": "http://www.nubomedia.eu/",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "adapter.js": "v0.2.9",
+    "angular": "1.5.7",
+    "angular-route": "1.5.7",
+    "angular-loader": "1.5.7",
+    "angular-mocks": "1.5.7",
+    "angular-animate": "1.5.7",
+    "materialize": "0.97.6",
+    "jquery": "latest",
+    "components-font-awesome": "latest",
+    "angular-sweetalert": "latest",
+    "angular-svg-round-progressbar": "latest"
+  },
+  "resolutions": {
+    "angular": "1.5.7",
+    "jquery": ">=2.1.1"
+  }
+}

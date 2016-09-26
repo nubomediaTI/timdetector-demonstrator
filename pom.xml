@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.tilab.ca</groupId>
+    <artifactId>timdetector</artifactId>
+    <version>6.1.0</version>
+    <packaging>pom</packaging>
+   
+    <parent>	  
+        <groupId>org.kurento</groupId>
+        <artifactId>kurento-parent-pom</artifactId>
+        <version>6.5.0</version>
+    </parent>
+    
+    <modules>
+        <module>call_on_detect</module>
+        <module>jrpcwrap</module>
+        <module>sip_endpoint</module>
+    </modules>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <nubomedia-media-client.version>1.0.1</nubomedia-media-client.version>
+        <kurento.client.version>6.4.0</kurento.client.version>
+        <nubo-facedetector.version>6.4.01</nubo-facedetector.version>
+        <javacv.version>1.1</javacv.version>
+        <jrpcwrap.version>6.1.0</jrpcwrap.version>
+        <sip.endpoint.version>6.1.0</sip.endpoint.version>
+    </properties>
+    
+    <dependencyManagement>
+        <dependencies>
+            
+            <dependency>
+                <groupId>com.tilab.ca</groupId>
+                <artifactId>jrpcwrap</artifactId>
+                <version>${jrpcwrap.version}</version>
+            </dependency>
+            
+            <dependency>
+                <groupId>com.tilab.ca</groupId>
+                <artifactId>sip_endpoint</artifactId>
+                <version>${sip.endpoint.version}</version>
+            </dependency>
+            
+            <dependency>
+                <groupId>org.kurento</groupId>
+                <artifactId>kurento-client</artifactId>
+                <version>${kurento.client.version}</version>
+            </dependency>
+            <!-- Nubomedia -->
+            <dependency>
+                <groupId>com.visual-tools.nubomedia</groupId>
+                <artifactId>nubofacedetector</artifactId>
+                <version>${nubo-facedetector.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>de.fhg.fokus.nubomedia</groupId>
+                <artifactId>nubomedia-media-client</artifactId>
+                <version>${nubomedia-media-client.version}</version>
+            </dependency>
+                
+                
+            <!-- external libraries -->
+            <dependency>
+                <groupId>org.bytedeco</groupId>
+                <artifactId>javacv</artifactId>
+                <version>${javacv.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+    
+    <repositories>
+        <repository>
+            <id>kurento-snapshots</id>
+            <name>Kurento Snapshot Repository</name>
+            <url>http://maven.kurento.org/archiva/repository/snapshots/</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+    
+</project>

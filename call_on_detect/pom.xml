@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.tilab.ca</groupId>
+        <artifactId>timdetector</artifactId>
+        <version>6.1.0</version>
+    </parent>
+    <artifactId>call_on_detect</artifactId>
+    <packaging>jar</packaging>
+    
+    <properties>
+        <main.class>com.tilab.ca.call_on_detect.CallOnDetectMain</main.class>
+    </properties>
+    
+    <dependencies>
+        
+        <dependency>
+            <groupId>com.tilab.ca</groupId>
+            <artifactId>jrpcwrap</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.tilab.ca</groupId>
+            <artifactId>sip_endpoint</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        
+        <dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-redis</artifactId>
+			<version>1.4.0.RELEASE</version>
+		</dependency>
+        
+        <!-- Kurento -->
+        <dependency>
+            <groupId>org.kurento</groupId>
+            <artifactId>kurento-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.kurento</groupId>
+            <artifactId>kurento-utils-js</artifactId>
+        </dependency>	
+
+        <!-- Nubomedia -->
+        <dependency>
+            <groupId>com.visual-tools.nubomedia</groupId>
+            <artifactId>nubofacedetector</artifactId>
+        </dependency>
+
+ <!--
+        <dependency>
+            <groupId>de.fhg.fokus.nubomedia</groupId>
+            <artifactId>nubomedia-media-client</artifactId>
+        </dependency>
+        
+        Prova SIP 
+         <dependency>
+            <groupId>javax.sip</groupId>
+            <artifactId>jain-sip-ri</artifactId>
+            <version>1.2.281</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>javax.sip</groupId>
+            <artifactId>jain-sip-api</artifactId>
+            <version>1.2.1.4</version>
+        </dependency>
+        
+        
+         external dependencies 
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>javacv</artifactId>
+        </dependency> -->
+    </dependencies>
+    
+    <build>
+    	<!-- <pluginManagement> -->
+	        <plugins>
+	            <plugin>
+	                <groupId>org.springframework.boot</groupId>
+	                <artifactId>spring-boot-maven-plugin</artifactId>
+	                <configuration>
+	                    <mainClass>${main.class}</mainClass>
+	                    <layout>ZIP</layout>
+	                </configuration>
+	                <executions>
+	                    <execution>
+	                        <goals>
+	                            <goal>repackage</goal>
+	                        </goals>
+	                    </execution>
+	                </executions>
+	            </plugin>
+	            
+	            <plugin>
+	                <groupId>org.codehaus.mojo</groupId>
+	                <artifactId>exec-maven-plugin</artifactId>
+	                <executions>
+	                    <execution>
+	                        <phase>generate-sources</phase>
+	                        <goals>
+	                            <goal>exec</goal>
+	                        </goals>
+	                    </execution>
+	                </executions>
+	                <configuration>
+	                    <executable>bower</executable>
+	                    <arguments>
+	                        <argument>install</argument>
+	                        <argument>- -allow-root</argument>
+	                    </arguments>
+	                    <mainClass>${main.class}</mainClass>
+	                </configuration>
+	            </plugin>
+	            <plugin>
+	                <artifactId>maven-clean-plugin</artifactId>
+	                <configuration>
+	                    <filesets>
+	                        <fileset>
+	                            <directory>src/main/resources/static/bower_components</directory>
+	                        </fileset>
+	                    </filesets>
+	                </configuration>
+	            </plugin> 
+	        </plugins>
+		<!--</pluginManagement> -->
+		
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>banner.txt</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>.</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>bower.json</include>
+                </includes>
+            </resource>
+        </resources>
+    </build>
+
+    
+</project>

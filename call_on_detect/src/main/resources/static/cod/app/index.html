@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en" ng-app="cod" class="no-js"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Call on detect project</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!--Import Google Icon Font
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  -->
+  <link rel="stylesheet" href="bower_components/materialize/dist/css/materialize.min.css">
+  <link rel="stylesheet" href="bower_components/components-font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="bower_components/sweetalert/dist/sweetalert.css">
+  <link rel="stylesheet" href="app.css">
+  <link rel="stylesheet" href="directives/cod-video.css">
+</head>
+<body ng-controller="AppController">
+ <div class="se-pre-con"></div>
+  <!--[if lt IE 7]>
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+  <![endif]-->
+
+  <header>
+    <div ng-include="'navbar/navbar.html'"></div>
+  </header>
+
+
+  <div class="container" ng-view></div>
+
+  <div class="bottom">Call on detect: <b>v<span app-version></span></b></div>
+
+  <div ng-show="notification" class="alert-box" ng-class="toastClass">
+      {{notification.message}}
+  </div>
+
+  <!-- In production use:
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/x.x.x/angular.min.js"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.2/modernizr.js"></script>
+  -->
+  <script src="bower_components/jquery/dist/jquery.min.js"></script>
+
+  <script type="text/javascript">
+      $(window).on("load",function() {
+        // Animate loader off screen
+        $(".se-pre-con").fadeOut("slow");;
+      });
+  </script>
+
+  <script src="bower_components/angular/angular.js"></script>
+  <script src="bower_components/adapter.js/adapter.js"></script>
+  <script src="/js/kurento-utils.js"></script>
+  <script src="bower_components/angular-route/angular-route.js"></script>
+  <script src="bower_components/angular-svg-round-progressbar/build/roundProgress.min.js"></script>
+  <script src="bower_components/materialize/dist/js/materialize.min.js"></script>
+  <script src="bower_components/sweetalert/dist/sweetalert.min.js"></script>
+  <script src="bower_components/angular-sweetalert/SweetAlert.min.js"></script>
+  <script src="directives/cod-video.js"></script>
+  <script src="components/version/version.js"></script>
+  <script src="components/version/version-directive.js"></script>
+  <script src="app.js"></script>
+  <script src="directives/material-directives.js"></script>
+  <script src="login/login.js"></script>
+  <script src="navbar/navbar.js"></script>
+  <script src="settings/settings.js"></script>
+  <script src="video/video.js"></script>
+  <script src="services/wsService.js"></script>
+  <script src="services/kurentoService.js"></script>
+  <script src="services/soundService.js"></script>
+
+</body>
+</html>

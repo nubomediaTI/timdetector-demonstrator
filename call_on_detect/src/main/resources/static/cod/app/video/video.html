@@ -1,0 +1,31 @@
+<div class="section"></div>
+<div class="container">
+  <cod-video settings = "{{currSettings}}"></cod-video>
+</div>
+<div class="instructions" ng-show="firstAccess">
+  <div class="container">
+    <h1 class="title">Instructions</h1>
+    <div class='row'>
+      <div class='col s12'>
+        This Application lets your children issue calls to your Telephone number/sip contact
+        just by putting their face in front of the webcam without need to do anything else.
+        The sound of a ringing phone will let them know the call is started.
+        <ol>
+          <li>Click the <i>Start</i> button</li>
+          <li>wait until the face detector is loaded</li>
+          <li>Put your face in front of the camera</li>
+          <li>Once your face is detected the call will be issued to the
+            telephone number/sip contact you defined on settings
+          </li>
+          <li>Enjoy your call</li>
+          <li>Once the call is finished the application will be ready for another call</li>
+        </ol>
+      </div>
+    </div>
+    <div class='row'>
+      <div class='col s10'>
+        <a href class="btn btn-large waves-effect blue lighten-3 right text-black" ng-click="firstAccess = false">Got it</a>
+      </div>
+    </div>
+ </div>
+</div>

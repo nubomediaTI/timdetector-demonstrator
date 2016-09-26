@@ -1,0 +1,20 @@
+<div class="navbar-fixed" ng-controller="NavbarController">
+  <nav>
+    <div class="nav-wrapper">
+       <a href class="brand-logo">
+         <div class="col xs-2">
+           <i class="fa fa-cloud" aria-hidden="true"></i>
+         </div>
+       </a>
+        <div ng-show="loggedUser">
+          <a href data-activates="mobile-demo" class="button-collapse" material-button-menu-collapse><i class="fa fa-bars"></i></a>
+          <ul class="right hide-on-med-and-down">
+            <li><a href="#!settings"><i class="fa fa-cogs" aria-hidden="true"></i></a></li>
+          </ul>
+          <ul class="side-nav" id="mobile-demo">
+            <li><a href="#!settings"><i class="fa fa-cogs" aria-hidden="true"></i> Settings</a></li>
+          </ul>
+        </div>
+    </div>
+  </nav>
+</div>
