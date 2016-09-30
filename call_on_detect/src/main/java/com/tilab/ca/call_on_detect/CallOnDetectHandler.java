@@ -290,7 +290,8 @@ public class CallOnDetectHandler implements JrpcEventListener {
         		case Response.BUSY_HERE:
             		resp.addProperty("details", "busy");
         	}
-        	
+        	userSession.getCallEventWaitTimer().reset();
+        	resp.addProperty("timer", userSession.getCallEventWaitTimer().getRemainingTime());
             sendNotification(transaction, NotificationKeys.CALL.getKey(), resp);    
         });
         

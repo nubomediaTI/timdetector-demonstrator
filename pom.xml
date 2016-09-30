@@ -21,9 +21,9 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.target>1.8</maven.compiler.target>
         <maven.compiler.source>1.8</maven.compiler.source>
-        <nubomedia-media-client.version>1.0.1</nubomedia-media-client.version>
-        <kurento.client.version>6.4.0</kurento.client.version>
-        <nubo-facedetector.version>6.4.01</nubo-facedetector.version>
+        <nubomedia-media-client.version>6.5.0</nubomedia-media-client.version>
+        <kurento.client.version>6.5.0</kurento.client.version>
+        <nubo-facedetector.version>6.5.0</nubo-facedetector.version>
         <javacv.version>1.1</javacv.version>
         <jrpcwrap.version>6.1.0</jrpcwrap.version>
         <sip.endpoint.version>6.1.0</sip.endpoint.version>

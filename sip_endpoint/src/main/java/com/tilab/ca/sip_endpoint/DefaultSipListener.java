@@ -168,6 +168,9 @@ public class DefaultSipListener implements SipListener {
 					case Response.RINGING:
 						log.info("Ringing..");
 						break;
+					case Response.SESSION_PROGRESS:
+						log.info("session progress..");
+						break;
 					default:
 						log.warn("received response code "+response.getStatusCode()+" recognized as error. Calling call failed listener..");
 						//status backs to waiting until the count reaches the maximum number of attempts. Afterwards it change to error status (the channel is unavailable)

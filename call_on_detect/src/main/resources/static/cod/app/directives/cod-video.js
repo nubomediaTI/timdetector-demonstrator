@@ -152,8 +152,9 @@ angular.module('cod.codVideo',['oitozero.ngSweetAlert','angular-svg-round-progre
 
         scope.callStarted = false;
 
-        if(currTimer)
-          $interval.cancel(currTimer);
+        if(currTimer){
+          scope.waitSecs = 0;
+        }
 
         $log.debug("Call On detect stopped");
       }
@@ -273,6 +274,7 @@ angular.module('cod.codVideo',['oitozero.ngSweetAlert','angular-svg-round-progre
                 soundService.call.callingTone.pause();
                 scope.callStarted = false;
                 handleCallFailed(message.details);
+                setWaitTimer(message.timer);
                 break;
           }
       });
@@ -285,6 +287,8 @@ angular.module('cod.codVideo',['oitozero.ngSweetAlert','angular-svg-round-progre
           case "busy":
                 onError(scope,"called user is busy. please try again later","failed to call dest user due to call refuse");
                 break;
+          default:
+               onError(scope,"something went wrong during the call. Prease try again on timer expiring");
         }
       }
     }
