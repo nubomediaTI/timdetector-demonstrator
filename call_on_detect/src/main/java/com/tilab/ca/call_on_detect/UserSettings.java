@@ -11,6 +11,7 @@ public class UserSettings {
 	
 	private String rtspUrl;
 	
+	private String kmsIp;
 	
 	public String getUsername() {
 		return username;
@@ -41,6 +42,12 @@ public class UserSettings {
 	}
 	public void setRtspUrl(String rtspUrl) {
 		this.rtspUrl = rtspUrl;
+	}
+	public String getKmsIp() {
+		return kmsIp;
+	}
+	public void setKmsIp(String kmsIp) {
+		this.kmsIp = kmsIp;
 	}
 	
 }

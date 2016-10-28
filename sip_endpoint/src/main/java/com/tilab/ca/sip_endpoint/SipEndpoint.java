@@ -10,6 +10,7 @@ import com.tilab.ca.sip_endpoint.listeners.interfaces.CallSuccessListener;
 import com.tilab.ca.sip_endpoint.listeners.interfaces.ErrorListener;
 import com.tilab.ca.sip_endpoint.listeners.interfaces.SipEventListener;
 import com.tilab.ca.sip_endpoint.listeners.interfaces.SipOperationFailedListener;
+import com.tilab.ca.sip_endpoint.utils.IpUtils;
 import com.tilab.ca.sip_endpoint.utils.SipUtils;
 
 
@@ -34,6 +35,10 @@ public class SipEndpoint {
 	//kurento
     private RtpEndpoint rtpEndpoint;
     private MediaPipeline mediaPipeline;
+    private String kmsUrl;
+    
+    //FIXME temporary to test
+    private String kmsIp; 
     
     //listeners
     private ErrorListener errorListener =  null;
@@ -73,7 +78,11 @@ public class SipEndpoint {
 		log.info("local ip is "+localAddress+" and local port "+localPort);
 		
 		this.enableAvpf = builder.enableAvpf;
+		this.kmsUrl = builder.kmsUrl;
+		if(!SipUtils.isBlank(kmsUrl))
+        	kmsIp = IpUtils.getKmsIpFromUrl(kmsUrl);
 		
+		//this.kurentoClient = builder.kurentoClient;
 		this.mediaPipeline = builder.pipeline;
 		this.sipClient = new SipClientBuilder().confs(sipAccountConfs).listenOn(localAddress, localPort)
 											  .build();
@@ -88,6 +97,10 @@ public class SipEndpoint {
 		sipClient.unregister();
 	}
 	
+	//public void setKmsIp(String kmsIp){
+		//this.kmsIp = kmsIp;
+	//}
+	
 	/**
 	 * start a call procedure to the sip user passed as parameter
 	 * @param toUser destination sip user username 
@@ -101,6 +114,18 @@ public class SipEndpoint {
              
             String sdpData = rtpEndpoint.generateOffer();     
             
+            //log.info("got kmsIp: "+kmsIp);
+            
+            log.info("got kmsIp: "+kmsIp);
+            
+            //replacing the kurento local ip 
+            //if(!SipUtils.isBlank(kmsIp)){
+            if(!SipUtils.isBlank(kmsIp) && !IpUtils.isPrivateV4OrLoopbackAddress(kmsIp)){
+           		log.info("replacing local ip with remote one..");
+               	sdpData = sdpData.replaceAll("c=IN IP4 ([0-9]+\\.){3}[0-9]+","c=IN IP4 "+kmsIp);
+            }else{
+        		log.info("detected private address on kmsIp or kmsUri not provided. Skipping SDP offer KMS Ip replace..");
+        	}
             
             if(!enableAvpf)
             	sdpData = sdpData.replace("RTP/AVPF","RTP/AVP");
@@ -229,6 +254,7 @@ public class SipEndpoint {
         
         //kurento media pipeline
         private MediaPipeline pipeline;
+        private String kmsUrl;
         private String listenOnInterface;
         
         public Builder(){}
@@ -281,6 +307,11 @@ public class SipEndpoint {
             return this;
         }
         
+        public Builder kmsUrl(String kmsUrl){
+            this.kmsUrl = kmsUrl;
+            return this;
+        }
+        
         public Builder mediaPipeline(MediaPipeline pipeline){
             this.pipeline = pipeline;
             return this;
@@ -292,6 +323,7 @@ public class SipEndpoint {
             return this;
         }
         
+        //&& kurentoClient!=null
         private boolean areMandatoryFiledsFilled(){
         	return !SipUtils.anyBlank(host,username,password) && pipeline != null;
         }

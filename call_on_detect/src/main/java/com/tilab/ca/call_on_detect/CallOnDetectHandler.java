@@ -74,6 +74,7 @@ public class CallOnDetectHandler implements JrpcEventListener {
     @JrpcMethod(name = "settings")
     public void settings(Transaction transaction,
                         @JsonKey(name = "destUser") String destUser,
+                        @JsonKey(name = "kmsIp", optional = true) String kmsIp,
                         @JsonKey(name = "destHost", optional = true) String destHost,
                         @JsonKey(name = "rtspUrl", optional = true) String rtspUrl) throws Exception {
     	
@@ -86,11 +87,13 @@ public class CallOnDetectHandler implements JrpcEventListener {
             user.setUserSettings(new UserSettings());
             users.put(sessionId, user);
         }
+        log.info("received kmsIp in settings: "+kmsIp);
         
         UserSettings settings = user.getUserSettings();
         settings.setRtspUrl(rtspUrl);
         settings.setDestUser(destUser);
         settings.setDestHost(destHost);
+        settings.setKmsIp(kmsIp);
         log.info("saved setting for session id "+sessionId);
     }
     
@@ -115,7 +118,7 @@ public class CallOnDetectHandler implements JrpcEventListener {
         }
         WebRtcEndpoint webRtcEndpoint = userSession.getWebRtcEndpoint();
         //Ice Candidate
-        webRtcEndpoint.addOnIceCandidateListener((OnIceCandidateEvent event) -> {
+        webRtcEndpoint.addOnIceCandidateListener((event) -> {
             JsonObject response = new JsonObject();
             response.add("candidate", JsonUtils.toJsonObject(event.getCandidate()));
             try {
@@ -224,6 +227,7 @@ public class CallOnDetectHandler implements JrpcEventListener {
     private void registerSipEndpoint(UserSession user,Transaction transaction,SipEventListener rsh,SipOperationFailedListener sof) throws Exception{
         SipEndpoint sipEndpoint = new SipEndpoint.Builder()
         						                 .mediaPipeline(user.getMediaPipeline())
+        						                 .kmsUrl(user.getKmsUrl())
         						                 .password(user.getUserSettings().getPassword())
         						                 .username(user.getUserSettings().getUsername())
         						                 .host(host)
@@ -231,6 +235,7 @@ public class CallOnDetectHandler implements JrpcEventListener {
         						                 .listenOnInterface(listenOnInterface)
         						                 .build();
         
+        //sipEndpoint.setKmsIp(user.getUserSettings().getKmsIp());
         sipEndpoint.addRegistrationListeners(rsh, sof);
         
         sipEndpoint.addErrorListener((Exception e) ->{

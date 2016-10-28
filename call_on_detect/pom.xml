@@ -37,10 +37,11 @@
 		</dependency>
         
         <!-- Kurento -->
+        <!--  
         <dependency>
             <groupId>org.kurento</groupId>
             <artifactId>kurento-client</artifactId>
-        </dependency>
+        </dependency> -->
         <dependency>
             <groupId>org.kurento</groupId>
             <artifactId>kurento-utils-js</artifactId>
@@ -52,12 +53,12 @@
             <artifactId>nubofacedetector</artifactId>
         </dependency>
 
- <!--
+ 
         <dependency>
             <groupId>de.fhg.fokus.nubomedia</groupId>
             <artifactId>nubomedia-media-client</artifactId>
         </dependency>
-        
+ <!--       
         Prova SIP 
          <dependency>
             <groupId>javax.sip</groupId>

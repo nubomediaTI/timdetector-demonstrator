@@ -1,10 +1,13 @@
 package com.tilab.ca.call_on_detect;
 
+import java.util.UUID;
+
 import org.kurento.client.IceCandidate;
 import org.kurento.client.KurentoClient;
 import org.kurento.client.MediaPipeline;
 //import com.tilab.ca.call_on_detect.sip.SipEndpoint;
 import org.kurento.client.PlayerEndpoint;
+import org.kurento.client.Properties;
 import org.kurento.client.WebRtcEndpoint;
 import org.kurento.module.nubofacedetector.NuboFaceDetector;
 import org.slf4j.Logger;
@@ -25,6 +28,8 @@ public class UserSession {
     private final String sessionId;
     private CallEventWaitTimer callEventWaitTimer;
     
+    private String kmsUrl;
+    
     private  PlayerEndpoint playerEndpoint;
     private boolean isPlayerEndpointSet = false;
     
@@ -33,16 +38,19 @@ public class UserSession {
     private SipEndpoint sipEndpoint;
 
     public UserSession(String sessionId) {
-	this.sessionId = sessionId;
+		this.sessionId = sessionId;
+		
+		String kmsId = UUID.randomUUID().toString();
+	    kmsUrl = KurentoClient.getKmsUrl(kmsId, new Properties());
+	    
+		// One KurentoClient instance per session
+		kurentoClient = KurentoClient.create(kmsUrl);
+		log.info("Created kurentoClient (session {})", sessionId);
 	
-	// One KurentoClient instance per session
-	kurentoClient = KurentoClient.create();
-	log.info("Created kurentoClient (session {})", sessionId);
-
-	mediaPipeline = getKurentoClient().createMediaPipeline();
-	log.info("Created Media Pipeline {} (session {})", getMediaPipeline().getId(), sessionId);
-
-	webRtcEndpoint = new WebRtcEndpoint.Builder(getMediaPipeline()).build();
+		mediaPipeline = getKurentoClient().createMediaPipeline();
+		log.info("Created Media Pipeline {} (session {})", getMediaPipeline().getId(), sessionId);
+	
+		webRtcEndpoint = new WebRtcEndpoint.Builder(getMediaPipeline()).build();
     }
 
     public WebRtcEndpoint getWebRtcEndpoint() {
@@ -143,7 +151,13 @@ public class UserSession {
     public void setSipEndpoint(SipEndpoint sipEndpoint) {
         this.sipEndpoint = sipEndpoint;
     }
-    
-    
+
+	public String getKmsUrl() {
+		return kmsUrl;
+	}
+
+	public void setKmsUrl(String kmsUrl) {
+		this.kmsUrl = kmsUrl;
+	}
     
 }

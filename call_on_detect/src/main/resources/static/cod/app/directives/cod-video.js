@@ -251,7 +251,7 @@ angular.module('cod.codVideo',['oitozero.ngSweetAlert','angular-svg-round-progre
       });
 
       wsService.registerNotificationHandler(NOTIFICATIONS.ICE_CANDIDATE_AUDIO,function(message){
-        webRtcPeer.addIceCandidate(message.candidate, function (error) {
+        webRtcPeerAudio.addIceCandidate(message.candidate, function (error) {
           if (error)
           onError(scope,"Error adding audio ice candidate",error);
         });
