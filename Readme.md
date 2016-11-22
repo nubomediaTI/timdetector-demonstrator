@@ -1,7 +1,5 @@
 #Call on detect Nubomedia demonstrator
 
-#Call on detect Nubomedia demonstrator
-
 Prerequisites
 -------------------------
 To run properly this demo you need to have an installed and working instance of the following components:
@@ -19,7 +17,7 @@ git clone https://github.com/nubomediaTI/timdetector-demonstrator.git
 cd timdetector-demonstrator
 ```
 
-##COD configuration
+###COD configuration
 
 Get the application.properties template and make a copy:
 
@@ -46,6 +44,9 @@ sip.host=showdemos2.ddns.net                #the host address of the PBX to whic
 #sip.listenOnInterface=
 ```
 
+replace the old application.properties or place this file on the same folder you will launch the application.
+
+###running the application
 
 ```bash
 mvn clean package -DskipTests
