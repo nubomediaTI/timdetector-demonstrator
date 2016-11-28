@@ -23,8 +23,8 @@ public class UserSession {
     private final WebRtcEndpoint webRtcEndpoint;
     private WebRtcEndpoint webRtcEndpointReceiver;
     private NuboFaceDetector faceDetector;
-    private final MediaPipeline mediaPipeline;
-    private final KurentoClient kurentoClient;
+    private MediaPipeline mediaPipeline;
+    private KurentoClient kurentoClient;
     private final String sessionId;
     private CallEventWaitTimer callEventWaitTimer;
     
@@ -88,7 +88,7 @@ public class UserSession {
     }
 
     public final KurentoClient getKurentoClient() {
-	return kurentoClient;
+    	return kurentoClient;
     }
 
     public void addCandidate(IceCandidate candidate) {
@@ -111,8 +111,10 @@ public class UserSession {
             dismissPlayerEndpoint(playerEndpoint);
         log.info("Releasing media pipeline {}(session {})", getMediaPipeline().getId(), sessionId);
         getMediaPipeline().release();
+        mediaPipeline = null;
         log.info("Destroying kurentoClient (session {})", sessionId);
         getKurentoClient().destroy();
+        kurentoClient = null;
     }
     
     

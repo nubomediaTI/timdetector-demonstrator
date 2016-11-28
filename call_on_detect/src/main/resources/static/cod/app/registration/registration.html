@@ -1,0 +1,31 @@
+<div class="section"></div>
+<main>
+  <center>
+    <h5 class="indigo-text">Registration</h5>
+    <div class="section"></div>
+    <div class="container">
+      <form class="col s12" method="post" ng-submit="register(user)">
+
+        <div class='row'>
+          <div class='input-field col s12'>
+            <input class='validate' type='text' name='username' id='username' ng-model="user.username"/>
+            <label for='username'>Username</label>
+          </div>
+        </div>
+        <div class='row'>
+          <div class='input-field col s12'>
+            <input class='validate' type='password' name='password' id='password' ng-model="user.password"/>
+            <label for='password'>Password</label>
+          </div>
+        </div>
+        <br>
+        <br>
+        <div class='row'>
+          <div class="col l3 m3 s4">
+            <button type='submit' name='btnSave' class='btn btn-large waves-effect indigo'>Save</button>
+          </div>
+        </div>
+    </form>
+  </div>
+</center>
+</main>

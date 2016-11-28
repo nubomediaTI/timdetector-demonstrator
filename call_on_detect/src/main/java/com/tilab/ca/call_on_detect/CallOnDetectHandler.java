@@ -5,9 +5,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.sip.message.Response;
 
+import org.kurento.client.IceCandidateFoundEvent;
 import org.kurento.client.MediaElement;
 import org.kurento.client.MediaPipeline;
-import org.kurento.client.OnIceCandidateEvent;
 import org.kurento.client.PlayerEndpoint;
 import org.kurento.client.WebRtcEndpoint;
 import org.kurento.jsonrpc.JsonUtils;
@@ -44,6 +44,9 @@ public class CallOnDetectHandler implements JrpcEventListener {
     @Value("${sip.host}")
     private String host;
     
+    @Value("${sip.port:5060}")
+    private int port;
+    
     @Value("${sip.stunServer:#{null}}")
     private String stunServer;
     
@@ -75,6 +78,7 @@ public class CallOnDetectHandler implements JrpcEventListener {
     public void settings(Transaction transaction,
                         @JsonKey(name = "destUser") String destUser,
                         @JsonKey(name = "kmsIp", optional = true) String kmsIp,
+                        @JsonKey(name = "sipHost", optional = true) String host,
                         @JsonKey(name = "destHost", optional = true) String destHost,
                         @JsonKey(name = "rtspUrl", optional = true) String rtspUrl) throws Exception {
     	
@@ -92,6 +96,7 @@ public class CallOnDetectHandler implements JrpcEventListener {
         UserSettings settings = user.getUserSettings();
         settings.setRtspUrl(rtspUrl);
         settings.setDestUser(destUser);
+        settings.setHost(host);
         settings.setDestHost(destHost);
         settings.setKmsIp(kmsIp);
         log.info("saved setting for session id "+sessionId);
@@ -118,7 +123,7 @@ public class CallOnDetectHandler implements JrpcEventListener {
         }
         WebRtcEndpoint webRtcEndpoint = userSession.getWebRtcEndpoint();
         //Ice Candidate
-        webRtcEndpoint.addOnIceCandidateListener((event) -> {
+        webRtcEndpoint.addIceCandidateFoundListener((event) -> {
             JsonObject response = new JsonObject();
             response.add("candidate", JsonUtils.toJsonObject(event.getCandidate()));
             try {
@@ -227,10 +232,11 @@ public class CallOnDetectHandler implements JrpcEventListener {
     private void registerSipEndpoint(UserSession user,Transaction transaction,SipEventListener rsh,SipOperationFailedListener sof) throws Exception{
         SipEndpoint sipEndpoint = new SipEndpoint.Builder()
         						                 .mediaPipeline(user.getMediaPipeline())
-        						                 .kmsUrl(user.getKmsUrl())
         						                 .password(user.getUserSettings().getPassword())
         						                 .username(user.getUserSettings().getUsername())
-        						                 .host(host)
+        						                 .kmsUrl(user.getKmsUrl())
+        						                 .host(SipUtils.isBlank(user.getUserSettings().getHost())?host:user.getUserSettings().getHost())
+        						                 .port(port)
         						                 .withStunServer(stunServer)
         						                 .listenOnInterface(listenOnInterface)
         						                 .build();
@@ -262,7 +268,7 @@ public class CallOnDetectHandler implements JrpcEventListener {
         
         if(!SipUtils.isBlank(sdpOffer)){
 	        //Ice Candidate
-	        webRtcEndpointRec.addOnIceCandidateListener((OnIceCandidateEvent event) -> {
+	        webRtcEndpointRec.addIceCandidateFoundListener((IceCandidateFoundEvent event) -> {
 	            JsonObject response = new JsonObject();
 	            response.add("candidate", JsonUtils.toJsonObject(event.getCandidate()));
 	            try {
@@ -348,6 +354,7 @@ public class CallOnDetectHandler implements JrpcEventListener {
         	}
         	releaseSipEndpoint(user);
             user.release();
+            users.remove(user.getSessionId());
             UserSession nuser = new UserSession(user.getSessionId());
             nuser.setUserSettings(user.getUserSettings());
             users.put(user.getSessionId(), nuser);
@@ -389,11 +396,14 @@ public class CallOnDetectHandler implements JrpcEventListener {
         try {
         	UserSession user = users.get(session.getSessionId());
             if(user!=null){
-            	if(user.getSipEndpoint()!=null && user.getSipEndpoint().getSipEndpointStatus()==SipEndpointStatus.IN_CALL){
-            		//close the call
-            		user.getSipEndpoint().stopSipCall();
+            	log.info("user was {}. releasing resources..",user.getUserSettings().getUsername());
+            	if(user.getSipEndpoint()!=null){
+            		releaseSipEndpoint(user);
+            		if(user.getSipEndpoint().getSipEndpointStatus()==SipEndpointStatus.IN_CALL){
+            			//close the call
+            			user.getSipEndpoint().stopSipCall();
+            		}
             	}
-            	releaseSipEndpoint(user);
                 user.release();
                 users.remove(user.getSessionId());
             }

@@ -58,26 +58,6 @@
             <groupId>de.fhg.fokus.nubomedia</groupId>
             <artifactId>nubomedia-media-client</artifactId>
         </dependency>
- <!--       
-        Prova SIP 
-         <dependency>
-            <groupId>javax.sip</groupId>
-            <artifactId>jain-sip-ri</artifactId>
-            <version>1.2.281</version>
-        </dependency>
-        
-        <dependency>
-            <groupId>javax.sip</groupId>
-            <artifactId>jain-sip-api</artifactId>
-            <version>1.2.1.4</version>
-        </dependency>
-        
-        
-         external dependencies 
-        <dependency>
-            <groupId>org.bytedeco</groupId>
-            <artifactId>javacv</artifactId>
-        </dependency> -->
     </dependencies>
     
     <build>
@@ -86,6 +66,7 @@
 	            <plugin>
 	                <groupId>org.springframework.boot</groupId>
 	                <artifactId>spring-boot-maven-plugin</artifactId>
+			<version>1.4.1.RELEASE</version>
 	                <configuration>
 	                    <mainClass>${main.class}</mainClass>
 	                    <layout>ZIP</layout>
@@ -134,14 +115,16 @@
 		
         <resources>
             <resource>
-                <directory>src/main/resources</directory>
+                <directory>src/main/resources/static/cod/app</directory>
                 <filtering>false</filtering>
+                <targetPath>static</targetPath>
             </resource>
             <resource>
                 <directory>src/main/resources</directory>
                 <filtering>true</filtering>
                 <includes>
                     <include>banner.txt</include>
+                    <include>application.properties</include>
                 </includes>
             </resource>
             <resource>

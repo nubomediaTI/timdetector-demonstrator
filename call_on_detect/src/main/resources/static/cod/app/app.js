@@ -4,6 +4,7 @@
 angular.module('cod', [
   'ngRoute',
   'cod.login',
+  'cod.registration',
   'cod.settings',
   'cod.video',
   'cod.version',

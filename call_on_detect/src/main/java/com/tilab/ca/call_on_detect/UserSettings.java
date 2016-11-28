@@ -7,6 +7,9 @@ public class UserSettings {
 	private transient String password;
 	
 	private String destUser;
+	
+	private String host;
+	
 	private String destHost;
 	
 	private String rtspUrl;
@@ -31,11 +34,12 @@ public class UserSettings {
 	public void setDestUser(String destUser) {
 		this.destUser = destUser;
 	}
-	public String getDestHost() {
-		return destHost;
+	
+	public String getHost() {
+		return host;
 	}
-	public void setDestHost(String destHost) {
-		this.destHost = destHost;
+	public void setHost(String host) {
+		this.host = host;
 	}
 	public String getRtspUrl() {
 		return rtspUrl;
@@ -48,6 +52,12 @@ public class UserSettings {
 	}
 	public void setKmsIp(String kmsIp) {
 		this.kmsIp = kmsIp;
+	}
+	public String getDestHost() {
+		return destHost;
+	}
+	public void setDestHost(String destHost) {
+		this.destHost = destHost;
 	}
 	
 }
