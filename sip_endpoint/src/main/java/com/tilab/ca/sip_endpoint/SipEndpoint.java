@@ -264,6 +264,11 @@ public class SipEndpoint {
         	return this;
         }
         
+        public Builder port(Integer port){
+        	this.port = port;
+        	return this;
+        }
+        
         public Builder transport(String transport){
             this.transport = transport;
             return this;

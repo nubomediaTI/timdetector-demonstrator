@@ -78,7 +78,7 @@ public class SipClient {
 			this.contactPort = stunAddress.getPort();
 			isStunEnabled = true;
 		}
-		this.sipStackKey = sipAccountConfs.getUsername(); //use sip username that is expected to be unique
+		this.sipStackKey = sipAccountConfs.getUsername()+"_"+System.currentTimeMillis(); //use sip username that is expected to be unique plus timestamp millis
 		this.maxNumAttempts = this.sipAccountConfs.getMaxNumRegAttempts();
 		this.numRegAttempts = this.maxNumAttempts;
 

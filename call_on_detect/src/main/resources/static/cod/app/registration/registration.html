@@ -8,14 +8,26 @@
 
         <div class='row'>
           <div class='input-field col s12'>
-            <input class='validate' type='text' name='username' id='username' ng-model="user.username"/>
+            <input class='validate' type='text' name='username' id='username' ng-model="settings.username"/>
             <label for='username'>Username</label>
           </div>
         </div>
         <div class='row'>
           <div class='input-field col s12'>
-            <input class='validate' type='password' name='password' id='password' ng-model="user.password"/>
+            <input class='validate' type='password' name='password' id='password' ng-model="settings.password"/>
             <label for='password'>Password</label>
+          </div>
+        </div>
+        <div class='row'>
+          <div class='input-field col s12'>
+            <input class='validate' type='text' name='sipHost' id='sipHost' ng-model="settings.sipHost"/>
+            <label for='sipHost'>Sip Host</label>
+          </div>
+        </div>
+        <div class='row'>
+          <div class='input-field col s12'>
+            <input class='validate' type='text' name='sipPort' id='sipPort' ng-model="settings.sipPort"/>
+            <label for='sipPort'>Sip Port</label>
           </div>
         </div>
         <br>

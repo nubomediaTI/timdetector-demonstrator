@@ -19,6 +19,8 @@ angular.module('cod.settings', ['ngRoute'])
 
 .controller('SettingsCtrl', ['$scope','$log','wsService','$location','$rootScope','currSettings',function($scope,$log,wsService,$location,$rootScope,currSettings) {
 
+    $scope.settings = currSettings.value;
+    
     var settingsRespHandler = wsService.registerResponseHandler(1,function(result){
       $log.debug("settings updated successfully!");
       $log.debug(result);

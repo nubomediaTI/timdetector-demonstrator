@@ -35,14 +35,18 @@ public class SipUtilsTest {
 	@Test
 	public void testGetLocalIp() throws IOException {
 		String ip = SipUtils.getLocalIp("eth0");
-		System.out.println(ip);
+                assertNotNull(ip);
+                assertTrue(!ip.isEmpty());
 	}
 	
 	@Test
 	public void testGetAddressFromStun() throws Exception {
 		StunServerAddress ssa = SipUtils.getStunAddress("stun.l.google.com", 19302, SipUtils.getLocalIp(null), SipUtils.getFirstFreePort());
-		System.out.println("Host is "+ssa.getHost());
-		System.out.println("Port is "+ssa.getPort());
+		assertNotNull(ssa);
+                assertNotNull(ssa.getHost());
+                assertTrue(!ssa.getHost().isEmpty());
+                assertNotNull(ssa.getPort());
+                assertTrue(ssa.getPort()>0);
 	}
 	
 }

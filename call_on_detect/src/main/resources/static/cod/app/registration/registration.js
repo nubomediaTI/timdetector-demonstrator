@@ -10,8 +10,9 @@ angular.module('cod.registration', ['ngRoute'])
 }])
 
 .controller('RegistrationCtrl', ['$scope','$log','wsService','$location',
-                                  function($scope,$log,wsService,$location) {
+function($scope,$log,wsService,$location) {
 
+  $scope.register = function(user){
     var registerRespHandler = wsService.registerResponseHandler(1,function(result){
       $log.debug("user registered successfully!");
       $log.debug(result);
@@ -23,8 +24,6 @@ angular.module('cod.registration', ['ngRoute'])
       $log.error(error);
       $scope.$emit("notification",{message:"failed register. Please try again",type:"error"});
     });
-
-    $scope.register = function(user){
-      wsService.sendRequest(1,"register",$scope.settings);
-    };
+    wsService.sendRequest(1,"register",$scope.settings);
+  }
 }]);

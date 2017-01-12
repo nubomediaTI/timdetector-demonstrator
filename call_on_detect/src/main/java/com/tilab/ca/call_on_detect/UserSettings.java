@@ -3,14 +3,14 @@ package com.tilab.ca.call_on_detect;
 
 public class UserSettings {
     
-	private transient String username;
-	private transient String password;
+	private String username;
+	private String password;
 	
 	private String destUser;
 	
-	private String host;
+	private String sipHost;
 	
-	private String destHost;
+	private Integer sipPort;
 	
 	private String rtspUrl;
 	
@@ -35,11 +35,17 @@ public class UserSettings {
 		this.destUser = destUser;
 	}
 	
-	public String getHost() {
-		return host;
+	public String getSipHost() {
+		return sipHost;
 	}
-	public void setHost(String host) {
-		this.host = host;
+	public void setSipHost(String sipHost) {
+		this.sipHost = sipHost;
+	}
+	public Integer getSipPort() {
+		return sipPort;
+	}
+	public void setSipPort(Integer sipPort) {
+		this.sipPort = sipPort;
 	}
 	public String getRtspUrl() {
 		return rtspUrl;
@@ -53,11 +59,4 @@ public class UserSettings {
 	public void setKmsIp(String kmsIp) {
 		this.kmsIp = kmsIp;
 	}
-	public String getDestHost() {
-		return destHost;
-	}
-	public void setDestHost(String destHost) {
-		this.destHost = destHost;
-	}
-	
 }

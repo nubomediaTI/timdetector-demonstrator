@@ -83,8 +83,8 @@ public class JrpcWsHandler<T extends JrpcEventListener> extends DefaultJsonRpcHa
             if(!jk.optional())
                 throw new IllegalArgumentException("json request does not contain parameter with name "+jk.name());
             
-            if(ClassUtils.isPrimitiveOrWrapper(param.getType()))
-                return ClassUtils.resolvePrimitiveIfNecessary(param.getType()).newInstance();
+            if(ClassUtils.isPrimitiveOrWrapper(param.getType()) && !ClassUtils.isPrimitiveWrapper(param.getType()))
+                return ClassUtils.resolvePrimitiveIfNecessary(param.getType()).getConstructor().newInstance();
             return null;
         }
         if(param.getType().equals(JsonObject.class))
