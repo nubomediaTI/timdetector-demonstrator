@@ -7,6 +7,15 @@ angular.module('cod').service("wsService",['$log','$location','$rootScope',funct
   var responseHandlers = {};
   var notificationsHandlers = {};
 
+  var readyStateConstants = {
+        'CONNECTING': 0,
+        'OPEN': 1,
+        'CLOSING': 2,
+        'CLOSED': 3,
+        'RECONNECT_ABORTED': 4
+  };
+
+
   var lws = new WebSocket('wss://' + $location.host() + ":" + $location.port() + '/callOnDetect');
 
   wsService.registerResponseHandler = function(id,onSuccess,onError){
@@ -28,19 +37,19 @@ angular.module('cod').service("wsService",['$log','$location','$rootScope',funct
   }
 
   wsService.deleteResponseHandler = function(id,handler){
-    responseHandlers[id].splice(responseHandlers[id].indexOf(handler),1);
+    responseHandlers[id] = (responseHandlers[id]).filter(function(respHanlder){respHanlder.id != handler.id});
   }
 
   wsService.deleteNotificationHandler = function(method,handler){
-    responseHandlers[method].splice(responseHandlers[method].indexOf(handler),1);
+    responseHandlers[method] = (responseHandlers[method]).filter(function(respHanlder){respHanlder.id != handler.id});
   }
 
-  wsService.registerHandler = function(handler){
-    registeredHandlers.push(handler);
+  wsService.deleteAllResponseHandlers = function(){
+      responseHandlers = {};
   }
 
-  wsService.deleteHandler = function(handler){
-    registeredHandlers.splice(registeredHandlers.indexOf(handler),1);
+  wsService.deleteAllNotificationHandlers = function(){
+      notificationsHandlers = {};
   }
 
   wsService.sendMessage = function (message) {
@@ -132,8 +141,12 @@ angular.module('cod').service("wsService",['$log','$location','$rootScope',funct
 
   function sendMessage(message){
     var jsonMessage = JSON.stringify(message);
-    $log.debug('Sending message: ' + jsonMessage);
     try{
+      if(lws.readyState === readyStateConstants.CONNECTING){
+          setTimeout(function(){sendMessage(message)},500); //if the websocket is in connecting state retry in 500ms
+          return;
+      }
+      $log.debug('Sending message: ' + jsonMessage);
       lws.send(jsonMessage);
     }catch(err){
         $log.error(err);

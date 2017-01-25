@@ -279,6 +279,11 @@ angular.module('cod.codVideo',['oitozero.ngSweetAlert','angular-svg-round-progre
           }
       });
 
+      scope.$on('$routeChangeStart', function(next, current) {
+          wsService.deleteAllResponseHandlers();
+          wsService.deleteAllNotificationHandlers();
+      });
+
       function handleCallFailed(details){
         switch(details){
           case "requestTimeout":

@@ -109,6 +109,8 @@ public class UserSession {
         log.info("stopping playerendpoint if active (session {})", sessionId);
         if(isPlayerEndpointSet)
             dismissPlayerEndpoint(playerEndpoint);
+        log.info("Releasing webrtc endpoint for session {}", sessionId);
+        webRtcEndpoint.release();
         log.info("Releasing media pipeline {}(session {})", getMediaPipeline().getId(), sessionId);
         getMediaPipeline().release();
         mediaPipeline = null;

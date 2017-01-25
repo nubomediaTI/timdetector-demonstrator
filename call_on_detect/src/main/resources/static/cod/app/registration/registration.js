@@ -23,6 +23,7 @@ function($scope,$log,wsService,$location) {
     },function(error){
       $log.error(error);
       $scope.$emit("notification",{message:"failed register. Please try again",type:"error"});
+      wsService.deleteResponseHandler(1,registerRespHandler);
     });
     wsService.sendRequest(1,"register",$scope.settings);
   }

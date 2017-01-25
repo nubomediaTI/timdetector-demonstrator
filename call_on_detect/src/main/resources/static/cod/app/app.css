@@ -49,11 +49,21 @@ button[disabled]{
 }
 
 .bottom{
-  //position: absolute;
+  position: fixed;
   bottom:1em;
   left: 1em;
 }
 
 .with-margin-top-2{
   margin-top: 2em;
+}
+
+.spin-fullscreen-loader{
+  position: fixed;
+	left: 0px;
+	top: 0px;
+	width: 100%;
+	height: 100%;
+	z-index: 9999;
+	background: url(images/spin.gif) center no-repeat;
 }

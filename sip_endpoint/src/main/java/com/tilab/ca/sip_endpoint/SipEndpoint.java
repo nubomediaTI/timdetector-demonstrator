@@ -109,7 +109,12 @@ public class SipEndpoint {
 	 */
 	public void startSipCall(String toUser,String toSipAddress) throws Exception{    
 			setSipEndpointStatus(SipEndpointStatus.IN_CALL);
+                        
             //create rtp endpoint every time a call is started since it doesn not support renegotiation
+            if(this.rtpEndpoint!=null){
+                this.rtpEndpoint.release();
+            }
+            
             this.rtpEndpoint = new RtpEndpoint.Builder(this.mediaPipeline).build();
              
             String sdpData = rtpEndpoint.generateOffer();     
@@ -143,7 +148,10 @@ public class SipEndpoint {
 	
 	public void dispose() throws Exception{
 		this.sipClient.dispose();
-		this.rtpEndpoint = null;
+                if(this.rtpEndpoint!=null){
+                    this.rtpEndpoint.release();
+                    this.rtpEndpoint = null;
+                }
 	}
 	
 	public String getContactIp(){

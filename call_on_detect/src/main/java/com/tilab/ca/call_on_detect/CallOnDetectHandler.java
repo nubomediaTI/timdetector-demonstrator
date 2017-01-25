@@ -30,18 +30,17 @@ import com.tilab.ca.sip_endpoint.SipEndpointStatus;
 import com.tilab.ca.sip_endpoint.listeners.interfaces.SipEventListener;
 import com.tilab.ca.sip_endpoint.listeners.interfaces.SipOperationFailedListener;
 import com.tilab.ca.sip_endpoint.utils.SipUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
 
 public class CallOnDetectHandler implements JrpcEventListener {
 
     private static final Logger log = LoggerFactory.getLogger(CallOnDetectHandler.class);
 
     private final ConcurrentHashMap<String, UserSession> users = new ConcurrentHashMap<>();
+    
+     private final ConcurrentHashMap<String, String> credentialsMap = new ConcurrentHashMap<>();
 
-    @Autowired
-    private StringRedisTemplate redisTemplate;
+    //@Autowired
+    //private StringRedisTemplate redisTemplate;
 
     @Value("${serverEvents.timer.milliseconds:4000}")
     private int serverEventsTimerMilliseconds;
@@ -70,8 +69,9 @@ public class CallOnDetectHandler implements JrpcEventListener {
             throw new IllegalArgumentException("provide a username or password");
         }
         String userKey = getLoginKey(username, password);
-        if (!this.redisTemplate.hasKey(userKey)) {
-            ValueOperations<String, String> ops = this.redisTemplate.opsForValue();
+        //if (!this.redisTemplate.hasKey(userKey)) {
+        if (!this.credentialsMap.containsKey(userKey)) {
+            //ValueOperations<String, String> ops = this.redisTemplate.opsForValue();
             UserSettings settings = new UserSettings();
             settings.setUsername(username);
             settings.setPassword(password);
@@ -81,7 +81,8 @@ public class CallOnDetectHandler implements JrpcEventListener {
             if (sipPort != null && sipPort > 0) {
                 settings.setSipPort(sipPort);
             }
-            ops.set(userKey, JsonUtils.toJson(settings));
+            this.credentialsMap.put(userKey, JsonUtils.toJson(settings));
+            //ops.set(userKey, JsonUtils.toJson(settings));
         } else {
             throw new IllegalArgumentException("username already exists on database");
         }
@@ -95,12 +96,14 @@ public class CallOnDetectHandler implements JrpcEventListener {
     public void login(Transaction transaction, @JsonKey(name = "username") String username,
                         @JsonKey(name = "password") String password) throws Exception {
     	String loginKey = getLoginKey(username, password);
-    	if (!this.redisTemplate.hasKey(loginKey)) {
+    	//if (!this.redisTemplate.hasKey(loginKey)) {
+        if (!this.credentialsMap.containsKey(loginKey)) {
     		transaction.sendError(400, "Bad Request", "invalid username or password");
     		return;
     	}
-    	ValueOperations<String, String> ops = this.redisTemplate.opsForValue();
-    	UserSettings userSettings = JsonUtils.fromJson(ops.get(loginKey), UserSettings.class);
+    	//ValueOperations<String, String> ops = this.redisTemplate.opsForValue();
+    	//UserSettings userSettings = JsonUtils.fromJson(ops.get(loginKey), UserSettings.class);
+        UserSettings userSettings = JsonUtils.fromJson(this.credentialsMap.get(loginKey), UserSettings.class);
     	
     	if (!userSettings.getPassword().equals(password)) {
     		transaction.sendError(400, "Bad Request", "invalid username or password");
@@ -147,75 +150,16 @@ public class CallOnDetectHandler implements JrpcEventListener {
         	settings.setSipPort(sipPort);
         settings.setKmsIp(kmsIp);
         
+        /*
         ValueOperations<String, String> ops = this.redisTemplate.opsForValue();
-        String userKey = getLoginKey(user.getUserSettings().getUsername(), user.getUserSettings().getPassword());
         ops.set(userKey, JsonUtils.toJson(settings));
+        */
+        String userKey = getLoginKey(user.getUserSettings().getUsername(), user.getUserSettings().getPassword());
+        this.credentialsMap.put(userKey, JsonUtils.toJson(settings));
         
         log.info("saved setting for session id "+sessionId);
     }
     
-
-    /*
-    @JrpcMethod(name = "login")
-    public void login(Transaction transaction, @JsonKey(name = "username") String username,
-            @JsonKey(name = "password") String password) throws Exception {
-        //right now a fake login
-        String sessionId = transaction.getSession().getSessionId();
-        log.info("saving login settings for session id " + sessionId);
-        UserSession user = users.get(sessionId);
-        if (user == null) {
-            user = new UserSession(sessionId);
-            user.setUserSettings(new UserSettings());
-            users.put(sessionId, user);
-        }
-
-        UserSettings settings = user.getUserSettings();
-        settings.setUsername(username);
-        settings.setPassword(password);
-        log.info("saved login setting for session id " + sessionId);
-        sendResponse(transaction, "settings", settings);
-    }
-
-    @JrpcMethod(name = "settings")
-    public void settings(Transaction transaction,
-            @JsonKey(name = "destUser") String destUser,
-            @JsonKey(name = "kmsIp", optional = true) String kmsIp,
-            @JsonKey(name = "sipHost", optional = true) String host,
-            @JsonKey(name = "destHost", optional = true) String destHost,
-            @JsonKey(name = "rtspUrl", optional = true) String rtspUrl) throws Exception {
-
-        String sessionId = transaction.getSession().getSessionId();
-        log.info("saving setting for session id " + sessionId);
-        UserSession user = users.get(sessionId);
-        //to substitute with new control now commented once developed new version
-        if (user == null) {
-            user = new UserSession(sessionId);
-            user.setUserSettings(new UserSettings());
-            users.put(sessionId, user);
-        }
-        log.info("received kmsIp in settings: " + kmsIp);
-
-        UserSettings settings = user.getUserSettings();
-        settings.setRtspUrl(rtspUrl);
-        settings.setDestUser(destUser);
-        settings.setHost(host);
-        settings.setDestHost(destHost);
-        settings.setKmsIp(kmsIp);
-        log.info("saved setting for session id " + sessionId);
-    }
-
-    @JrpcMethod(name = "getSettings")
-    public void getSettings(Transaction transaction) throws Exception {
-
-        String sessionId = transaction.getSession().getSessionId();
-        log.info("getting settings for session id " + sessionId);
-        UserSession user = users.get(sessionId);
-        if (user == null) {
-            throw new AppException(InternalErrorCodes.USER_NOT_AUTHENTICATED, "no active user session found");
-        }
-        sendResponse(transaction, "getSettings", user.getUserSettings());
-    }
-    */
     
     @JrpcMethod(name = "startWithWebRtcAsSource")
     public void startWithWebRtcAsSource(Transaction transaction, @JsonKey(name = "sdpOffer") String sdpOffer) throws Exception {
