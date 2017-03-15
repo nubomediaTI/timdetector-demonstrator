@@ -115,7 +115,11 @@ public class UserSession {
         getMediaPipeline().release();
         mediaPipeline = null;
         log.info("Destroying kurentoClient (session {})", sessionId);
-        getKurentoClient().destroy();
+        try{
+        	getKurentoClient().destroy();
+        }catch(Exception e ){
+        	log.error("failed to release kurento client",e);
+        }
         kurentoClient = null;
     }
     

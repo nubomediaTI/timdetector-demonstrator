@@ -148,10 +148,14 @@ public class SipEndpoint {
 	
 	public void dispose() throws Exception{
 		this.sipClient.dispose();
-                if(this.rtpEndpoint!=null){
-                    this.rtpEndpoint.release();
-                    this.rtpEndpoint = null;
-                }
+        if(this.rtpEndpoint!=null){
+        	try{
+        		this.rtpEndpoint.release();                		
+        	}catch(Exception e){
+        		log.error("failed to release rtpEndpoint.",e);
+        	}
+            this.rtpEndpoint = null;
+        }
 	}
 	
 	public String getContactIp(){
