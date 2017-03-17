@@ -12,7 +12,7 @@
             <label for='username'>Destination number</label>
           </div>
         </div>
-        <div class="row">
+        <div class="row" ng-show="false">
           <div class="col s12">
             <select ng-model="camType" id="camType" material-select>
               <option value="lc" selected>Local Cam</option>
@@ -27,7 +27,7 @@
             <label for="rtspUrl">RtspUrl</label>
           </div>
         </div>
-        <div class='row'>
+        <div class='row' ng-show="false">
           <div class='input-field col s12'>
             <input type="checkbox" id="enableVideoRec" ng-model="settings.videoRec" ng-init="settings.videoRec = false"/>
             <label for="enableVideoRec">Enable to receive video from dest user (only if supported)</label>

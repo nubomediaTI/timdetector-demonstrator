@@ -63,6 +63,7 @@ public class DefaultSipListener implements SipListener {
 	
 	
 	private void processBye(RequestEvent requestEvent){
+		log.info(" -----------> received BYE event!! $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
 		sipEndpoint.setSipEndpointStatus(SipEndpointStatus.WAITING);
 		sipEndpoint.getCallEndedListener().invoke();
 		sipClient.sendOkResponse(requestEvent);

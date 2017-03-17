@@ -1,5 +1,7 @@
 package com.tilab.ca.call_on_detect;
 
+import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.UUID;
 
 import org.kurento.client.IceCandidate;
@@ -45,7 +47,23 @@ public class UserSession {
 	    
 		// One KurentoClient instance per session
 		kurentoClient = KurentoClient.create(kmsUrl);
+	
 		log.info("Created kurentoClient (session {})", sessionId);
+		
+		//set kurentoclient id through reflection
+		try {
+			//log.info("***********************************");
+			//log.info("getting kurento client fields...");
+			//Arrays.asList(kurentoClient.getClass().getFields()).forEach(f -> log.info(f.getName()));
+			//log.info("getting kurento declared fields...");
+			//Arrays.asList(kurentoClient.getClass().getDeclaredFields()).forEach(f -> log.info(f.getName()));
+			log.info("setting kurento client id through reflection..");
+			Field kurentoClientIdField = kurentoClient.getClass().getDeclaredField("id");
+			kurentoClientIdField.setAccessible(true);
+			kurentoClientIdField.set(kurentoClient, kmsId);
+		} catch (Exception e) {
+			log.error("failed to set kmsId through reflection",e);
+		} 
 	
 		mediaPipeline = getKurentoClient().createMediaPipeline();
 		log.info("Created Media Pipeline {} (session {})", getMediaPipeline().getId(), sessionId);
